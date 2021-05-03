@@ -1,0 +1,10 @@
+{
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "driver": "SQLite",
+            "name": "Django Levelup",
+            "database": "db.sqlite3"
+        }
+    ]
+}
