@@ -1,5 +1,5 @@
 from levelupapi.models.gamer import Gamer
-from levelupapi.models.games import Game
+from levelupapi.models.game import Game
 from django.db import models
 
 class Event(models.Model):

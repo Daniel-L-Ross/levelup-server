@@ -1,4 +1,4 @@
-from levelupapi.models.games import Game
+from levelupapi.models.game import Game
 from django.db import models
 from django.contrib.auth.models import User
 
