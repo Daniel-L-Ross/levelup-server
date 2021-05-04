@@ -1,0 +1,22 @@
+[
+    {
+        "model": "levelupapi.game",
+        "pk": 1,
+        "fields": {
+            "genre": 1,
+            "title": "Settlers of Catan",
+            "number_of_players": 4,
+            "skill_level": 3
+        }
+    },
+    {
+        "model": "levelupapi.game",
+        "pk": 2,
+        "fields": {
+            "genre": 1,
+            "title": "Seven Wonders Duel",
+            "number_of_players": 2,
+            "skill_level": 4
+        }
+    }
+]
