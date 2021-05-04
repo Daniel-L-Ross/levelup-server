@@ -1,10 +1,10 @@
 [
     {
         "model": "levelupapi.gamer",
-        "pk": 1,
+        "pk": 2,
         "fields": {
-            "user": 1,
-            "bio": "Me"
+            "user": 2,
+            "bio": "Dan Ross"
         }
     }
 ]
