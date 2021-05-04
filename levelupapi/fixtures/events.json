@@ -4,19 +4,9 @@
         "pk": 1,
         "fields": {
             "game": 1,
-            "organizer": 2,
+            "organizer": 1,
             "date": "2021-05-05",
             "description": "Meet up at local coffee shop to play catan"
-        }
-    },
-    {
-        "model": "levelupapi.event",
-        "pk": 2,
-        "fields": {
-            "game": 2,
-            "organizer": 2,
-            "date": "2021-06-05",
-            "description": "Looking for other players interested in this game"
         }
     }
 ]
