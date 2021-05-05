@@ -3,8 +3,10 @@
         {
             "previewLimit": 50,
             "driver": "SQLite",
-            "name": "Django db",
+            "name": "level up",
             "database": "db.sqlite3"
         }
-    ]
+    ],
+    "python.linting.pylintEnabled": true,
+    "python.pythonPath": "/Users/danielross/.local/share/virtualenvs/level-up-server-Y4sTJpYx/bin/python"
 }
