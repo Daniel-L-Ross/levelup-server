@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework import serializers
 from levelupapi.models import Genre
 
-class Genres(ViewSet):
+class GenreView(ViewSet):
     """ Level up game genres"""
 
     def retrieve(self, request, pk=None):

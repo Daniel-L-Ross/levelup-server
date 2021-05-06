@@ -9,7 +9,7 @@ from rest_framework import serializers
 from levelupapi.models import Game, Event, Gamer
 from levelupapi.views.game import GameSerializer
 
-class Events(ViewSet):
+class EventView(ViewSet):
 
     def create(self, request):
 
@@ -17,6 +17,7 @@ class Events(ViewSet):
 
         event = Event()
         event.date = request.data["date"]
+        event.time = request.data["time"]
         event.description = request.data["description"]
         event.organizer = gamer
 
@@ -59,18 +60,26 @@ class Events(ViewSet):
             event = Event.objects.get(pk=pk)
             event.delete()
 
-            return Response({}, status=status.HTTP_204)
+            return Response({}, status=status.HTTP_204_NO_CONTENT)
 
+        except Event.DoesNotExist as ex:
+            return Response({'message': ex.ars[0]}, status=status.HTTP_404_NOT_FOUND)
 
+        except Exception as ex:
+                return Response({'message': ex.args[0]}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-class EventSerializer(serializers.ModelSerializer):
-    
-    organizer = EventGamerSerializer(many=False)
-    game = GameSerializer(many=False)
+    def list(self, request):
+        
+        events = Event.objects.all()
 
-    class Meta:
-        model = Event
-        fields = ('id', 'game', 'organizer', 'description', 'date')
+        game = self.request.query_params.get('gameId', None)
+        if game is not None:
+            events = events.filter(game__id=game)
+
+        serializer = EventSerializer(
+            events, many=True, context={'request': request})
+        return Response(serializer.data)
+
 
 class EventUserSerializer(serializers.ModelSerializer):
 
@@ -85,6 +94,15 @@ class EventGamerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Gamer
         fields = ['user']
+
+class EventSerializer(serializers.ModelSerializer):
+    
+    organizer = EventGamerSerializer(many=False)
+    game = GameSerializer(many=False)
+
+    class Meta:
+        model = Event
+        fields = ('id', 'game', 'organizer', 'description', 'date')
 
 class GamerSerializer(serializers.ModelSerializer):
 

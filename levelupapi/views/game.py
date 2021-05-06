@@ -7,13 +7,14 @@ from rest_framework import serializers
 from rest_framework import status
 from levelupapi.models import Game, Genre, Gamer
 
-class Games(ViewSet):
+class GameView(ViewSet):
 
     def create(self, request):
         gamer = Gamer.objects.get(user=request.auth.user)
 
         game = Game()
         game.title = request.data["title"]
+        game.maker = request.data["maker"]
         game.number_of_players = request.data["numberOfPlayers"]
         game.skill_level = request.data["skillLevel"]
         game.gamer = gamer
@@ -48,6 +49,7 @@ class Games(ViewSet):
 
         game = Game.objects.get(pk=pk)
         game.title = request.data["title"]
+        game.maker = request.data["maker"]
         game.number_of_players = request.data["numberOfPlayers"]
         game.skill_level = request.data["skillLevel"]
         game.gamer = gamer
@@ -88,5 +90,5 @@ class Games(ViewSet):
 class GameSerializer(serializers.ModelSerializer):
     class Meta:
         model = Game
-        fields = ('id', 'title', 'number_of_players', 'skill_level', 'genre')
+        fields = ('id', 'title', 'maker', 'number_of_players', 'skill_level', 'genre')
         depth = 1
