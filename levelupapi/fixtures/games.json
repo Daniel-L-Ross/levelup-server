@@ -3,8 +3,10 @@
         "model": "levelupapi.game",
         "pk": 1,
         "fields": {
+            "title": "Welcome To",
+            "maker": "Benoit Turpin",
+            "gamer": 1,
             "genre": 1,
-            "title": "Settlers of Catan",
             "number_of_players": 4,
             "skill_level": 3
         }
@@ -13,10 +15,24 @@
         "model": "levelupapi.game",
         "pk": 2,
         "fields": {
+            "title": "Settlers of Catan",
+            "maker": "Klaus Teuber",
+            "gamer": 1,
             "genre": 1,
-            "title": "Seven Wonders Duel",
-            "number_of_players": 2,
+            "number_of_players": 4,
             "skill_level": 4
+        }
+    },
+    {
+        "model": "levelupapi.game",
+        "pk": 3,
+        "fields": {
+            "title": "Dungeons & Dragons",
+            "maker": "Wizards of the Coast",
+            "gamer": 1,
+            "genre": 2,
+            "number_of_players": 5,
+            "skill_level": 3
         }
     }
 ]
