@@ -13,7 +13,7 @@ class EventView(ViewSet):
 
     def create(self, request):
 
-        gamer = Gamer.objects.get
+        gamer = Gamer.objects.get(user=request.auth.user)
 
         event = Event()
         event.date = request.data["date"]
@@ -27,7 +27,7 @@ class EventView(ViewSet):
         try:
             event.save()
             serializer = EventSerializer(event, context={'request': request})
-            return Response(serializer.data)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
         except ValidationError as ex:
             return Response({"reason": ex.message}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -37,7 +37,7 @@ class EventView(ViewSet):
             event = Event.objects.get(pk=pk)
             serializer = EventSerializer(event, context={'request': request})
             return Response(serializer.data)
-        except Exception:
+        except Exception as ex:
             return HttpResponseServerError(ex)
 
     def update(self, request, pk=None):
