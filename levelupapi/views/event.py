@@ -70,8 +70,23 @@ class EventView(ViewSet):
                 return Response({'message': ex.args[0]}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def list(self, request):
-        
+        """Handle GET requests to events resource
+
+        Returns:
+            Response -- JSON serialized list of events
+        """
+        gamer = Gamer.objects.get(user=request.auth.user)
         events = Event.objects.all()
+
+        # Set the `joined` property on every event
+        for event in events:
+            event.joined = None
+
+            try:
+                GamerEvent.objects.get(event=event, gamer=gamer)
+                event.joined = True
+            except GamerEvent.DoesNotExist:
+                event.joined=False
 
         game = self.request.query_params.get('gameId', None)
         if game is not None:
@@ -169,7 +184,7 @@ class EventSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Event
-        fields = ('id', 'game', 'organizer', 'description', 'date', 'time')
+        fields = ('id', 'game', 'organizer', 'description', 'date', 'time', 'joined')
 
 class GamerSerializer(serializers.ModelSerializer):
 
