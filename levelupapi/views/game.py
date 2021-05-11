@@ -43,7 +43,11 @@ class GameView(ViewSet):
             return HttpResponseServerError(ex)
 
     def update(self, request, pk=None):
+        """Handle PUT requests for a game
 
+        Returns:
+            Response -- Empty body with 204 status code
+        """
 
         gamer = Gamer.objects.get(user=request.auth.user)
 
