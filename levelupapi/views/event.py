@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from django.db.models import Count
 from django.core.exceptions import ValidationError
 from django.http import HttpResponseServerError
 from rest_framework import status
@@ -76,7 +77,7 @@ class EventView(ViewSet):
             Response -- JSON serialized list of events
         """
         gamer = Gamer.objects.get(user=request.auth.user)
-        events = Event.objects.all()
+        events = Event.objects.annotate(attendees_count=Count('attendees'))
 
         # Set the `joined` property on every event
         for event in events:
@@ -184,7 +185,7 @@ class EventSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Event
-        fields = ('id', 'game', 'organizer', 'description', 'date', 'time', 'joined')
+        fields = ('id', 'game', 'organizer', 'description', 'date', 'time', 'joined', 'attendees_count')
 
 class GamerSerializer(serializers.ModelSerializer):
 
