@@ -1,4 +1,5 @@
 from django.core.exceptions import ValidationError
+from django.db.models import Count
 from rest_framework import status
 from django.http import HttpResponseServerError
 from rest_framework.viewsets import ViewSet
@@ -80,7 +81,7 @@ class GameView(ViewSet):
 
     def list(self, request):
 
-        games = Game.objects.all()
+        games = Game.objects.annotate(event_count=Count('events'))
 
         genre = self.request.query_params.get('type', None)
         if genre is not None:
@@ -94,5 +95,5 @@ class GameView(ViewSet):
 class GameSerializer(serializers.ModelSerializer):
     class Meta:
         model = Game
-        fields = ('id', 'title', 'maker', 'number_of_players', 'skill_level', 'genre')
+        fields = ('id', 'title', 'maker', 'number_of_players', 'skill_level', 'genre', 'event_count')
         depth = 1
