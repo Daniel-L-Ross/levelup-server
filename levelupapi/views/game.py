@@ -1,5 +1,5 @@
 from django.core.exceptions import ValidationError
-from django.db.models import Count
+from django.db.models import Count, Q
 from rest_framework import status
 from django.http import HttpResponseServerError
 from rest_framework.viewsets import ViewSet
@@ -81,7 +81,12 @@ class GameView(ViewSet):
 
     def list(self, request):
 
-        games = Game.objects.annotate(event_count=Count('events'))
+        games = Game.objects.annotate(
+            event_count=Count('events'),
+            user_event_count=Count(
+                'events',
+                filter=Q()
+            ))
 
         genre = self.request.query_params.get('type', None)
         if genre is not None:
