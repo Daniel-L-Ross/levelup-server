@@ -1,7 +1,8 @@
 from django.core.exceptions import ValidationError
-from django.db.models import Count
+from django.db.models import Count, Q
 from rest_framework import status
 from django.http import HttpResponseServerError
+from rest_framework.fields import CreateOnlyDefault
 from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import serializers
@@ -80,8 +81,20 @@ class GameView(ViewSet):
             return Response({'message': ex.args[0]}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def list(self, request):
+        # get the current user for use with Q
+        gamer = Gamer.objects.get(user=request.auth.user)
 
-        games = Game.objects.annotate(event_count=Count('events'))
+        games = Game.objects.annotate(
+            # use COUNT annotate method to add a count 
+            # of how many events exist for this game
+            event_count=Count('events'),
+            # use Q to run a query. Here we get a count
+            # of how many events the current user has created 
+            # for the game
+            user_event_count=Count(
+                'events',
+                filter=Q(events__organizer=gamer)
+            ))
 
         genre = self.request.query_params.get('type', None)
         if genre is not None:
@@ -95,5 +108,5 @@ class GameView(ViewSet):
 class GameSerializer(serializers.ModelSerializer):
     class Meta:
         model = Game
-        fields = ('id', 'title', 'maker', 'number_of_players', 'skill_level', 'genre', 'event_count')
+        fields = ('id', 'title', 'maker', 'number_of_players', 'skill_level', 'genre', 'event_count', 'user_event_count')
         depth = 1
