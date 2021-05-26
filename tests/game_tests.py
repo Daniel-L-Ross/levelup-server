@@ -89,8 +89,17 @@ class GameTests(APITestCase):
         Ensure we can get an existing game
         """
 
-        #make sure request is authenticated
+        # make sure request is authenticated
         self.client.credentials(HTTP_AUTHORIZATION=f'Token {self.token}')
 
-        #initiate request and store response
+        # initiate request and store response
         response = self.client.get(f"/games/{self.game.id}")
+
+        # Parse the JSON in the response body
+        json_response = json.loads(response.content)
+
+        # Assert that the values are correct
+        self.assertEqual(json_response["title"], self.game.title)
+        self.assertEqual(json_response["maker"], self.game.maker)
+        self.assertEqual(json_response["skill_level"], self.game.skill_level)
+        self.assertEqual(json_response["number_of_players"], self.game.number_of_players)
