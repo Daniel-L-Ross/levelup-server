@@ -1,4 +1,5 @@
 import json
+from levelupapi.models.game import Game
 from rest_framework import status
 from rest_framework.test import APITestCase
 from levelupapi.models import Genre
@@ -28,6 +29,7 @@ class GameTests(APITestCase):
 
         # Store the auth token
         self.token = json_response["token"]
+        self.client.credentials(HTTP_AUTHORIZATION=f'Token {self.token}')
 
         # Assert that a user was created
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -38,6 +40,16 @@ class GameTests(APITestCase):
         genre = Genre()
         genre.label = "Board game"
         genre.save()
+
+        self.game = Game()
+        self.game.genre_id = 1
+        self.game.skill_level = 5
+        self.game.title = "Monopoly"
+        self.game.maker = "Milton Bradley"
+        self.game.number_of_players = 4
+        self.game.gamer_id = 1
+
+        self.game.save()
 
 
     def test_create_game(self):
@@ -55,7 +67,7 @@ class GameTests(APITestCase):
         }
 
         # Make sure request is authenticated
-        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token)
+        self.client.credentials(HTTP_AUTHORIZATION=f'Token {self.token}')
 
         # Initiate request and store response
         response = self.client.post(url, data, format='json')
@@ -67,7 +79,18 @@ class GameTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
         # Assert that the properties on the created resource are correct
-        self.assertEqual(json_response["title"], "Clue")
-        self.assertEqual(json_response["maker"], "Milton Bradley")
-        self.assertEqual(json_response["skill_level"], 5)
-        self.assertEqual(json_response["number_of_players"], 6)
+        self.assertEqual(json_response["title"], data["title"])
+        self.assertEqual(json_response["maker"], data["maker"])
+        self.assertEqual(json_response["skill_level"], data["skillLevel"])
+        self.assertEqual(json_response["number_of_players"], data["numberOfPlayers"])
+
+    def test_get_game(self):
+        """
+        Ensure we can get an existing game
+        """
+
+        #make sure request is authenticated
+        self.client.credentials(HTTP_AUTHORIZATION=f'Token {self.token}')
+
+        #initiate request and store response
+        response = self.client.get(f"/games/{self.game.id}")
