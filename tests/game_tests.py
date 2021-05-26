@@ -1,7 +1,7 @@
 import json
 from rest_framework import status
 from rest_framework.test import APITestCase
-from levelupapi.models import GameType
+from levelupapi.models import Genre
 
 
 class GameTests(APITestCase):
@@ -35,9 +35,9 @@ class GameTests(APITestCase):
         # SEED DATABASE WITH ONE GAME TYPE
         # This is needed because the API does not expose a /gametypes
         # endpoint for creating game types
-        gametype = GameType()
-        gametype.label = "Board game"
-        gametype.save()
+        genre = Genre()
+        genre.label = "Board game"
+        genre.save()
 
 
     def test_create_game(self):
@@ -47,7 +47,7 @@ class GameTests(APITestCase):
         # DEFINE GAME PROPERTIES
         url = "/games"
         data = {
-            "gameTypeId": 1,
+            "genreId": 1,
             "skillLevel": 5,
             "title": "Clue",
             "maker": "Milton Bradley",
