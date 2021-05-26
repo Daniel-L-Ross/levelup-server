@@ -1,4 +1,6 @@
 import json
+
+from django.http import response
 from levelupapi.models.game import Game
 from rest_framework import status
 from rest_framework.test import APITestCase
@@ -131,3 +133,16 @@ class GameTests(APITestCase):
         self.assertEqual(json_response["maker"], data["maker"])
         self.assertEqual(json_response["skill_level"], data["skillLevel"])
         self.assertEqual(json_response["number_of_players"], data["numberOfPlayers"])
+
+    def test_delete_game(self):
+        """
+        Ensure we can delete a game
+        """
+
+        self.client.credentials(HTTP_AUTHORIZATION=f'Token {self.token}')
+        response = self.client.delete(f"/games/{self.game.id}")
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+        #Get game again to verify 404 response
+        response = self.client.get(f"/games/{self.game.id}")
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
