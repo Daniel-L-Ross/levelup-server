@@ -16,21 +16,15 @@ def userevent_list(request):
             # Query for all games, with related user info.
             db_cursor.execute("""
                 SELECT
-                    e.id,
-                    e.organizer_id,
-                    e.date,
-                    e.time,
-                    g.title AS game_name,
-                    u.id user_id,
-                    u.first_name || ' ' || u.last_name AS full_name
+                    id,
+                    organizer_id,
+                    date,
+                    time,
+                    game_name,
+                    user_id,
+                    full_name
                 FROM
-                    levelupapi_event e
-                JOIN
-                    levelupapi_game g ON  g.id = e.game_id
-                JOIN
-                    levelupapi_gamer gr ON e.organizer_id = gr.id
-                JOIN
-                    auth_user u ON gr.user_id = u.id
+                    EVENTS_BY_USER
             """)
 
             dataset = db_cursor.fetchall()
