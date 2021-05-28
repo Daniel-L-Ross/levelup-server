@@ -8,8 +8,13 @@ from rest_framework.response import Response
 from rest_framework import serializers
 from rest_framework import status
 from levelupapi.models import Game, Genre, Gamer
+from rest_framework.permissions import DjangoModelPermissions
+
 
 class GameView(ViewSet):
+    permission_classes = [ DjangoModelPermissions ]
+    queryset = Game.objects.none()
+
 
     def create(self, request):
         gamer = Gamer.objects.get(user=request.auth.user)
