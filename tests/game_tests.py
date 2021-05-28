@@ -1,10 +1,8 @@
 import json
-
-from django.http import response
-from levelupapi.models.game import Game
+from levelupapi.models import Game
+from levelupapi.models import Genre
 from rest_framework import status
 from rest_framework.test import APITestCase
-from levelupapi.models import Genre
 
 
 class GameTests(APITestCase):
